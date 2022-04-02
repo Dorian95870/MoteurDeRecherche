@@ -1,0 +1,1 @@
+from indexation.index import getBooksByListOfIds, getIndex
