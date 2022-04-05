@@ -1,7 +1,4 @@
-import imp
-from pydoc import doc
-import numpy as np
-from flask import Flask, render_template, request, session, redirect , jsonify
+from flask import Flask, render_template, request, session, redirect
 from filtering import filterByRequest
 
 app = Flask(__name__)
