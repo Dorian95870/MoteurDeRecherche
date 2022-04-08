@@ -468,6 +468,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-backdrop-sepia:  ;
 }
 
+footer{
+  position:absolute;
+  bottom:0;
+  width:100%;
+}
+
 .fixed {
   position: fixed;
 }
