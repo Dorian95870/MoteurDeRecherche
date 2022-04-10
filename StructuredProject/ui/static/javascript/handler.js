@@ -10,6 +10,12 @@ hamburger.addEventListener("click", () => {
         : optionsMenu.classList.add("hidden");
 });
 
+colorMode.addEventListener("click", () => {
+    document.querySelector("html").classList.contains("dark")
+        ? document.querySelector("html").classList.remove("dark")
+        : document.querySelector("html").classList.add("dark");
+});
+
 searchBar.addEventListener("keyup", () => {
     if (searchBar.value != "") {
         searchBarSuggestion.classList.remove("hidden");
@@ -18,8 +24,3 @@ searchBar.addEventListener("keyup", () => {
     }
 });
 
-colorMode.addEventListener("click", () => {
-    document.querySelector("html").classList.contains("dark")
-        ? document.querySelector("html").classList.remove("dark")
-        : document.querySelector("html").classList.add("dark");
-});

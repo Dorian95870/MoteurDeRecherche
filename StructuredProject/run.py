@@ -5,4 +5,4 @@ from indexation import *
 data = getData()
 dataIndex = getIndex(data)
 
-startServer(dataIndex)
+startServer(dataIndex, data)

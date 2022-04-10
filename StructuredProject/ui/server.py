@@ -1,5 +1,8 @@
+import re, requests
+from indexation import *
 from flask import Flask, render_template, request, session, redirect
 from filtering import filterByRequest
+
 
 app = Flask(__name__)
 
@@ -8,25 +11,48 @@ def index():
     userRequest = request.args.get('q')
     if type(userRequest) != type(None):
         docs, count = filterByRequest(app.config['myIndex'], userRequest)
-        app.config['results'] = count
+        app.config['nbResults'] = count
         app.config['listOfBooks'] = docs
-        return redirect("/result")
+        return redirect("/result_page")
     return render_template('index.html')
 
 @app.route('/result')
 def result():
     BooksList = ""
     for x in range(len(app.config['listOfBooks'])):
-        #print(app.config['listOfBooks'][x])
         val = app.config['listOfBooks'][x]
         pyval = val.item()
         BooksList = BooksList + str(pyval) + '\n'
     
-    print('\n')
-    print(BooksList)
-    return str(app.config['results']) + " résultats ! " + BooksList
-    
+    return str(app.config['nbResults']) + " résultats ! " + BooksList
 
-def startServer(index):
+
+@app.route('/result_page')
+def result_page():
+    bookList = str(app.config['listOfBooks'])
+    bookList = re.sub(r'[^\w\s]', '', bookList)
+    result = bookList.split(' ')
+    res ='['
+    for x in result:
+        url = requests.get("https://gutendex.com/books/" + x + "/")
+        text = url.text
+        res = res + text
+        res = res + ','
+    res = res + ']'
+    res2 = res.split(',')
+    return render_template('results.html',message =res2)
+
+@app.route('/result_page2')
+def result_page2():
+    bookList = str(app.config['listOfBooks'])
+    bookList = re.sub(r'[^\w\s]', '', bookList)
+    result = bookList.split(' ')
+    result = [int(i) for i in result]
+    res = getBooksByListOfIds((app.config['dataSet']), result)
+    return render_template('results.html',message = res)
+
+
+def startServer(index, data):
     app.config['myIndex'] = index
+    app.config['dataSet'] = data
     app.run(debug=False)

@@ -23,3 +23,4 @@ def getBooksByListOfIds(data, ids: list()):
   for i in range(len(ids)):
     books.append(data.loc[data['Text#'] == ids[i]])
   return books
+
