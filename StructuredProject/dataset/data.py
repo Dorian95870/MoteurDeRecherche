@@ -1,10 +1,9 @@
 """# Get DataSet"""
 import pandas as pd
-import numpy as np
 
 
 def getData():
-  data = pd.read_csv('StructuredProject/dataset/pg_catalog.csv', dtype={'Text#':int, 'Subjects':str})
+  data = pd.read_csv('dataset/pg_catalog.csv', dtype={'Text#':int, 'Subjects':str})
   del data['Bookshelves']
   del data['LoCC']
   for i in range(len(data['Subjects'])):
