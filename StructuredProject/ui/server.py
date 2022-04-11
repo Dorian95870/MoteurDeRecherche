@@ -10,9 +10,9 @@ app = Flask(__name__)
 def index():
     userRequest = request.args.get('q')
     if type(userRequest) != type(None):
-        docs, count = filterByRequest(app.config['myIndex'], userRequest)
-        app.config['nbResults'] = count
-        app.config['listOfBooks'] = docs
+        docsOR, docsAND = filterByRequest(app.config['myIndex'], userRequest)
+        app.config['nbResults'] = len(docsOR)
+        app.config['listOfBooks'] = docsOR
         return redirect("/result_page")
     return render_template('index.html')
 
