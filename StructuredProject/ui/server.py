@@ -1,3 +1,4 @@
+from email import iterators
 import re, requests
 from indexation import *
 from flask import Flask, render_template, request, session, redirect
@@ -28,28 +29,21 @@ def result():
 
 
 @app.route('/result_page')
-def result_page():
-    bookList = str(app.config['listOfBooks'])
-    bookList = re.sub(r'[^\w\s]', '', bookList)
-    result = bookList.split(' ')
-    res ='['
-    for x in result:
-        url = requests.get("https://gutendex.com/books/" + x + "/")
-        text = url.text
-        res = res + text
-        res = res + ','
-    res = res + ']'
-    res2 = res.split(',')
-    return render_template('results.html',message =res2)
-
-@app.route('/result_page2')
 def result_page2():
     bookList = str(app.config['listOfBooks'])
     bookList = re.sub(r'[^\w\s]', '', bookList)
-    result = bookList.split(' ')
-    result = [int(i) for i in result]
-    res = getBooksByListOfIds((app.config['dataSet']), result)
-    return render_template('results.html',message = res)
+    resultId = bookList.split(' ')
+    resultId = [int(i) for i in resultId]
+    foundBooks = getBooksByListOfIds((app.config['dataSet']), resultId)
+    foundBooksTitles = foundBooks['Title'].values
+    foundBooksAuthors = foundBooks['Authors'].values
+    iterator = 0
+    TitleAuthorIdArray = []
+    for iterator in range (foundBooks['Title'].size) :
+        TitleAuthorIdArray.append((foundBooksTitles[iterator],foundBooksAuthors[iterator],resultId[iterator]))
+        
+    
+    return render_template('results.html',titlesAuthorsId = TitleAuthorIdArray)
 
 
 def startServer(index, data):

@@ -7,10 +7,10 @@ data = getData()
 dataIndex = getIndex(data)
 #print(dataIndex)
 
-res = getBooksByListOfIds(data, [2, 16245])
-#print(res['Title'].values)
+#res = getBooksByListOfIds(data, [2, 16245])
+#print(res['Authors'].values)
 
-fOR, fAND = filterByRequest(dataIndex, "Ten Original")
+#fOR, fAND = filterByRequest(dataIndex, "Ten Original")
 #print(fOR, fAND)
 
 startServer(dataIndex, data)

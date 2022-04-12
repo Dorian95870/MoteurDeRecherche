@@ -32,11 +32,17 @@
             </button>
         </header>
 
+        <div class="space"></div>
+
         <div class="h-full w-4/5 mx-auto flex flex-col justify-center">
-            {% for x in message %}
-                <p>{{ x }}</p>
+            {% for x,y,z in titlesAuthorsId %}
+                <a href="https://www.gutenberg.org/ebooks/{{ z }}"><p>Title : {{ x }}</p></a>
+                <p>Author : {{ y }}</p>
+                <br>
             {% endfor %}
         </div>
+
+        <div class="space"></div>
 
         <!--Footer: Informations complementaires (Qui sommes-nous, FAQ, etc...)-->
         <footer
@@ -47,11 +53,12 @@
                     <span class="capitalize font-bold text-lg">A propos</span>
                     <ul class="ml-4 mt-4">
                         <li>
-                            Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. Veniam deleniti provident ducimus nobis hic
-                            sequi non, officia sed iste. Iusto inventore iure,
-                            exercitationem animi id quae asperiores nesciunt!
-                            Sunt, dolor?
+                            Projet L3AO1 Université de Paris Cité
+                            <br>
+                            Steeven
+                            Mathieu
+                            Yanmei
+                            Dorian
                         </li>
                     </ul>
                 </div>
@@ -61,11 +68,12 @@
                     >
                     <ul class="ml-4 mt-4">
                         <li>
-                            Lorem ipsum dolor sit amet consectetur adipisicing
-                            elit. Eaque, magni numquam laudantium illum odio,
-                            voluptas esse in consectetur eligendi ducimus
-                            distinctio ab? Temporibus, enim! Ratione dolorum
-                            quasi cupiditate perspiciatis corporis.
+                            Projet L3AO1 Université de Paris Cité
+                            <br>
+                            Steeven
+                            Mathieu
+                            Yanmei
+                            Dorian
                         </li>
                     </ul>
                 </div>
