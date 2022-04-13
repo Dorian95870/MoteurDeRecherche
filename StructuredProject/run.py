@@ -13,4 +13,6 @@ dataIndex = getIndex(data)
 #fOR, fAND = filterByRequest(dataIndex, "Ten Original")
 #print(fOR, fAND)
 
+rankingByAndOr(dataIndex, "scarlet car")
+
 startServer(dataIndex, data)
