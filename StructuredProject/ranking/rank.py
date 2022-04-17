@@ -15,7 +15,7 @@ def rankingByAndOr(dataIndex, request :str):
 
   l3 = list()
   listeOR,listeAND = filterByRequest(dataIndex,request)
-  l3.insert(0,listeAND)
+  l3.extend(listeAND)
   l3.extend(listeOR)
 
   #enveler les doublons

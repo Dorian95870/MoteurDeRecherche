@@ -1,7 +1,7 @@
 import re
 from indexation import *
 from flask import Flask, render_template, request, redirect
-from filtering import filterByRequest
+from ranking import *
 
 
 app = Flask(__name__)
@@ -11,9 +11,10 @@ def index():
     userRequest = request.args.get('q')
     app.config['request'] = userRequest
     if type(userRequest) != type(None):
-        docsOR, docsAND = filterByRequest(app.config['myIndex'], userRequest)
-        app.config['nbResults'] = len(docsOR)
-        app.config['listOfBooks'] = docsOR
+        docs = rankingByAndOr(app.config['myIndex'], userRequest)
+
+        app.config['nbResults'] = len(docs)
+        app.config['listOfBooks'] = docs
         return redirect("/result_page")
     return render_template('index.html')
 
