@@ -11,3 +11,6 @@ class testFilter(unittest.TestCase):
         
     def test2WordsRequest(self):
         filterByRequest(self.data,"crimson car")
+        
+    def testRandomType(self):
+        filterByRequest(self.data,"sdjize")

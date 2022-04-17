@@ -1,0 +1,1 @@
+from ranking.rank import rankingByAndOr

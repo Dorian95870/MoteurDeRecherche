@@ -468,6 +468,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-backdrop-sepia:  ;
 }
 
+.blank{
+  height: 100px;
+}
+
 .space{
   padding-top: 25px;
   padding-bottom: 25px;

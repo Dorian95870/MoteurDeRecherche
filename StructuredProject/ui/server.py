@@ -9,6 +9,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     userRequest = request.args.get('q')
+    app.config['request'] = userRequest
     if type(userRequest) != type(None):
         docsOR, docsAND = filterByRequest(app.config['myIndex'], userRequest)
         app.config['nbResults'] = len(docsOR)
@@ -32,17 +33,19 @@ def result_page2():
     bookList = str(app.config['listOfBooks'])
     bookList = re.sub(r'[^\w\s]', '', bookList)
     resultId = bookList.split(' ')
-    resultId = [int(i) for i in resultId]
-    foundBooks = getBooksByListOfIds((app.config['dataSet']), resultId)
-    foundBooksTitles = foundBooks['Title'].values
-    foundBooksAuthors = foundBooks['Authors'].values
-    iterator = 0
-    TitleAuthorIdArray = []
-    for iterator in range (foundBooks['Title'].size) :
-        TitleAuthorIdArray.append((foundBooksTitles[iterator],foundBooksAuthors[iterator],resultId[iterator]))
-        
+    try :
+        resultId = [int(i) for i in resultId]
+        foundBooks = getBooksByListOfIds((app.config['dataSet']), resultId)
+        foundBooksTitles = foundBooks['Title'].values
+        foundBooksAuthors = foundBooks['Authors'].values
+        iterator = 0
+        TitleAuthorIdArray = []
+        for iterator in range (foundBooks['Title'].size) :
+            TitleAuthorIdArray.append((foundBooksTitles[iterator],foundBooksAuthors[iterator],resultId[iterator]))
+        return render_template('results.html',titlesAuthorsId = TitleAuthorIdArray, request = app.config['request'])
+    except ValueError :
+        return render_template('NoResult.html', request = app.config['request'])
     
-    return render_template('results.html',titlesAuthorsId = TitleAuthorIdArray)
 
 
 def startServer(index, data):
