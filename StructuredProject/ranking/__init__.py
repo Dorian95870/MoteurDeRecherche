@@ -1,1 +1,1 @@
-from ranking.rank import rankingByAndOr
+from ranking.rank import rankingByAndOr, score
