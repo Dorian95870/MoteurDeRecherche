@@ -5,56 +5,65 @@ from datetime import datetime
 
 
 # classer en premier pour les documents qui contient plus de mots dans la requete
-def rankingByAndOr(dataIndex, request :str):
-  """_ranking of the results by and fisrt and then by or_
+def rankingByAndOr(dataIndex, request: str):
+    """_ranking of the results by and fisrt and then by or_
 
-  Args:
-      dataIndex (_dict_): _the dataIndex we are using of or website_
-      request (str): _the user request_
+    Args:
+        dataIndex (_dict_): _the dataIndex we are using of or website_
+        request (str): _the user request_
 
-  Returns:
-      _List_: _List of results with AND results first and Or after_
-  """
+    Returns:
+        _List_: _List of results with AND results first and Or after_
+    """
 
-  l3 = list()
-  listOR,listAND = filterByRequest(dataIndex,request)
-  l3.extend(listAND)
-  l3.extend(listOR)
+    l3 = list()
+    listOR, listAND = filterByRequest(dataIndex, request)
+    l3.extend(listAND)
+    l3.extend(listOR)
 
-  #enveler les doublons
-  listOfIds= list()
-  for i in l3:
-   if i not in listOfIds:
-    listOfIds.append(i)
-  
-  return listOR,listAND, listOfIds
+    # enveler les doublons
+    listOfIds = list()
+    for i in l3:
+        if i not in listOfIds:
+            listOfIds.append(i)
 
-def score(data, dataIndex, request :str):
-  class Values(Enum):
-    AND = 10
-    OR = 5
-    DATE = 2
+    return listOR, listAND, listOfIds
 
-  listOR,listAND, listOfIds = rankingByAndOr(dataIndex, request)
 
-  # vvvvvv Scoring vvvvvv
+def score(data, dataIndex, request: str):
+    class Values(Enum):
+        AND = 10
+        OR = 5
+        DATE = 2
 
-  res = dict.fromkeys(listOfIds, 0)
-  docsInfos = getBooksByListOfIds(data, listOfIds)
+    listOR, listAND, listOfIds = rankingByAndOr(dataIndex, request)
 
-  # Score par type de filtrage
-  for doc in listOR:
-    res[doc] = Values.OR.value
-  for doc in listAND:
-    res[doc] = Values.AND.value
+    # vvvvvv Scoring vvvvvv
 
-  for i, doc in enumerate(listOfIds):
-    tempDoc = docsInfos.loc[docsInfos['Text#'] == doc]
+    res = dict.fromkeys(listOfIds, 0)
+    docsInfos = getBooksByListOfIds(data, listOfIds)
 
-    # Score par date
-    if datetime.strptime(tempDoc['Issued'][i][0], '%Y-%m-%d') >= datetime.strptime('2013-01-01', '%Y-%m-%d'):
-      res[doc] += Values.DATE.value
-      print(tempDoc['Issued'].values)
+    # Score par type de filtrage
+    for doc in listOR:
+        res[doc] = Values.OR.value
+    for doc in listAND:
+        res[doc] = Values.AND.value
 
-  return res
+    for i, doc in enumerate(listOfIds):
+        tempDoc = docsInfos.loc[docsInfos['Text#'] == doc]
 
+        # Score par date
+        if datetime.strptime(tempDoc['Issued'][i][0], '%Y-%m-%d') >= datetime.strptime('2013-01-01', '%Y-%m-%d'):
+            res[doc] += Values.DATE.value
+
+        # Score par download count
+        try:
+            res[doc] += int((tempDoc['download_count'] /
+                             data['download_count'].max())*20)
+        except:
+            res[doc] += 0
+
+    res_sorted = list(
+        dict(sorted(res.items(), key=lambda item: item[1])).keys())
+
+    return res_sorted[::-1]
