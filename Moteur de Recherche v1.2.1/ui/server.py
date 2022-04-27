@@ -45,5 +45,3 @@ def start_server(index, data):
     print("Go to http://127.0.0.1:5000 to access the website")
     serve(app, host="127.0.0.1", port=5000)
     print("Project Library is OFF 🔴")
-
-    # app.run(debug=False)

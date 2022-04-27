@@ -7,6 +7,14 @@ stop_words = ["a", "about", "above", "after", "again", "against", "all", "am", "
 
 
 def formate_word(words):
+    """Removes undesired characters
+
+    Args:
+        words (_string_): _the character string that requires formatting_
+
+    Returns:
+        _list_: _List of words formatted_
+    """
     res = []
     for tempWord in words.split(' '):
         tempWord = re.sub(r'[^a-zA-Z0-9]', '', tempWord)
@@ -30,7 +38,6 @@ def get_index(data):
     data_index = dict()
     for i in range(len(data[root])):
         docId = data['Text#'][i]
-        #words = data[root][i].split(' ')
         words = formate_word(data[root][i])
         for y, word in enumerate(words):
             if word not in data_index.keys():

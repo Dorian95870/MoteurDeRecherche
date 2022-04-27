@@ -4,7 +4,14 @@ from enum import Enum
 from datetime import datetime
 
 
+class rankValues(Enum):
+    AND = 10
+    OR = 5
+    DATE = 2
+
 # classer en premier pour les documents qui contient plus de mots dans la requete
+
+
 def ranking_by_and_or(dataIndex, request: str):
     """_ranking of the results by and fisrt and then by or_
 
@@ -30,11 +37,21 @@ def ranking_by_and_or(dataIndex, request: str):
     return list_or, list_and, list_of_ids
 
 
+def _sort_ascending_by_score(res):
+    return list(dict(sorted(res.items(), key=lambda item: item[1])).keys())
+
+
 def get_sorted_books_by_score(data, dataIndex, request: str):
-    class Values(Enum):
-        AND = 10
-        OR = 5
-        DATE = 2
+    """_Assigns a score to each document, this score defines the relevance of the document_
+
+    Args:
+        data (_dict_): _the data we are using of or website_
+        dataIndex (_dict_): _the dataIndex we are using of or website_
+        request (str): _the user request_
+
+    Returns:
+        _List_: _List of documents sort in descending order according to the score_
+    """
 
     list_or, list_and, list_of_ids = ranking_by_and_or(dataIndex, request)
 
@@ -44,16 +61,16 @@ def get_sorted_books_by_score(data, dataIndex, request: str):
 
     # Score par type de filtrage
     for doc in list_or:
-        res[doc] = Values.OR.value
+        res[doc] = rankValues.OR.value
     for doc in list_and:
-        res[doc] = Values.AND.value
+        res[doc] = rankValues.AND.value
 
     for i, doc in enumerate(list_of_ids):
         temp_doc = docs_infos.loc[docs_infos['Text#'] == doc]
 
         # Score par date
         if datetime.strptime(temp_doc['Issued'][i][0], '%Y-%m-%d') >= datetime.strptime('2013-01-01', '%Y-%m-%d'):
-            res[doc] += Values.DATE.value
+            res[doc] += rankValues.DATE.value
 
         # Score par download count
         try:
@@ -62,7 +79,6 @@ def get_sorted_books_by_score(data, dataIndex, request: str):
         except:
             res[doc] += 0
 
-    res_sorted = list(
-        dict(sorted(res.items(), key=lambda item: item[1])).keys())
+    res_sorted = _sort_ascending_by_score(res)
 
     return res_sorted[::-1]
