@@ -18,7 +18,7 @@ def result_page():
     user_request = request.args.get('q')
     app.config['request'] = user_request
     docs = get_sorted_books_by_score(
-        app.config['dataSet'], app.config['myIndex'], app.config['request'])
+        app.config['dataSet'], app.config['myIndex'], app.config['request'], app.config['tfIdf'])
     book_list = str(docs)
     book_list = re.sub(r'[^\w\s]', '', book_list)
     result_id = book_list.split(' ')
@@ -38,9 +38,10 @@ def result_page():
         return render_template('NoResult.html', request=app.config['request'])
 
 
-def start_server(index, data):
+def start_server(index, data, tfidf):
     app.config['myIndex'] = index
     app.config['dataSet'] = data
+    app.config['tfIdf'] = tfidf
     print("Project Library is ON 🟢")
     print("Go to http://127.0.0.1:5000 to access the website")
     serve(app, host="127.0.0.1", port=5000)

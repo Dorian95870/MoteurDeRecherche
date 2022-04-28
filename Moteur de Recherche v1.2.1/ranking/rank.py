@@ -41,7 +41,7 @@ def _sort_ascending_by_score(res):
     return list(dict(sorted(res.items(), key=lambda item: item[1])).keys())
 
 
-def get_sorted_books_by_score(data, dataIndex, request: str):
+def get_sorted_books_by_score(data, dataIndex, request: str, tfidf):
     """_Assigns a score to each document, this score defines the relevance of the document_
 
     Args:
@@ -76,6 +76,13 @@ def get_sorted_books_by_score(data, dataIndex, request: str):
         try:
             res[doc] += int((temp_doc['download_count'] /
                              data['download_count'].max())*20)
+        except:
+            res[doc] += 0
+
+        # Score par valeur de tfidf
+        try:
+            for word in tfidf[doc].keys():
+                res[doc] += tfidf[doc][word] / len(tfidf[doc].keys())
         except:
             res[doc] += 0
 
