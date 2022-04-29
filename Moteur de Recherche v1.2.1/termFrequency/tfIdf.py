@@ -1,7 +1,8 @@
-import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Détermine la fréquence relative d’un mot ou d’une combinaison de mots dans un document
+
+
 def _compute_tf(wordDict, bagOfWords):
     tfDict = {}
     bagOfWordsCount = len(bagOfWords)
@@ -10,6 +11,8 @@ def _compute_tf(wordDict, bagOfWords):
     return tfDict
 
 # Détermine le poids des mots rares dans tous les documents du corpus
+
+
 def _compute_idf(documents):
     import math
     N = len(documents)
@@ -25,13 +28,17 @@ def _compute_idf(documents):
     return idfDict
 
 # Détermine les scores pour tous les mots du corpus.
+
+
 def _compute_tfidf(tfBagOfWords, idfs):
     tfidf = {}
     for word, val in tfBagOfWords.items():
         tfidf[word] = val * idfs[word]
     return tfidf
 
-# Prendre tous les documents dans le Data 
+# Prendre tous les documents dans le Data
+
+
 def get_tfidf(data):
     title = 'Title'
     root = data[title][range(0, 67583)]
